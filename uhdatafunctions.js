@@ -1,14 +1,18 @@
+/* globals _, uhdata */
+/* exported testdata, maxDegrees, uhdata, percentageHawaiian, totalDegreesByYear, listCampuses, listCampusDegrees, doctoralDegreePrograms */
 
 //totalDegrees(data) This function can be passed uhdata and returns the total number of degrees awarded in the data set.
 //pluck number of awards from every record
 //reduce to one number
 
 function arrayOfAwards(data) {
-    return _.pluck(data, "AWARDS");
+  return _.pluck(data, "AWARDS");
 }
 
 function totalDegrees(data) {
-    return _.reduce(arrayOfAwards(data), function(memo, num){ return memo + num; }, 0);
+  return _.reduce(arrayOfAwards(data), function (memo, num) {
+    return memo + num;
+  }, 0);
 }
 
 //console.log(totalDegrees(uhdata));
@@ -18,11 +22,13 @@ function totalDegrees(data) {
 //find the totaldegrees that are hawaiian
 
 function findHawaiian(data) {
-    return _.filter(data, function(record) { return record["HAWAIIAN_LEGACY"] === "HAWAIIAN"} );
+  return _.filter(data, function (record) {
+    return record["HAWAIIAN_LEGACY"] === "HAWAIIAN";
+  });
 }
 
 function percentageHawaiian(data) {
-    return totalDegrees(findHawaiian(data))/totalDegrees(data);
+  return totalDegrees(findHawaiian(data)) / totalDegrees(data);
 }
 
 //console.log(percentageHawaiian(uhdata));
@@ -32,11 +38,13 @@ function percentageHawaiian(data) {
 //find totaldegrees for the filtered set
 
 function findYear(data, year) {
-    return _.filter(data, function(record) { return record["FISCAL_YEAR"] === year} );
+  return _.filter(data, function (record) {
+    return record["FISCAL_YEAR"] === year;
+  });
 }
 
 function totalDegreesByYear(data, year) {
-    return totalDegrees(findYear(data, year));
+  return totalDegrees(findYear(data, year));
 }
 
 //console.log(totalDegreesByYear(uhdata, 2011));
@@ -46,11 +54,11 @@ function totalDegreesByYear(data, year) {
 // find only the unique names
 
 function allCampuses(data) {
-    return _.pluck(data, "CAMPUS");
+  return _.pluck(data, "CAMPUS");
 }
 
 function listCampuses(data) {
-    return _.uniq(allCampuses(data));
+  return _.uniq(allCampuses(data));
 }
 
 //console.log(listCampuses(uhdata));
@@ -60,11 +68,11 @@ function listCampuses(data) {
 //find all degrees by campuses
 
 function groupByCampus(data) {
-    return _.groupBy(data, "CAMPUS");
+  return _.groupBy(data, "CAMPUS");
 }
 
 function listCampusDegrees(data) {
-    return _.mapObject(groupByCampus(data), totalDegrees);
+  return _.mapObject(groupByCampus(data), totalDegrees);
 }
 
 //console.log(listCampusDegrees(uhdata));
@@ -75,15 +83,15 @@ function listCampusDegrees(data) {
 //find the max number
 
 function groupByYear(data) {
-    return _.groupBy(data, "FISCAL_YEAR");
+  return _.groupBy(data, "FISCAL_YEAR");
 }
 
 function listYearDegrees(data) {
-    return _.mapObject(groupByYear(data), totalDegrees);
+  return _.mapObject(groupByYear(data), totalDegrees);
 }
 
 function maxDegrees(data) {
-    return _.max(listYearDegrees(data));
+  return _.max(listYearDegrees(data));
 }
 
 //console.log(maxDegrees(uhdata));
@@ -94,11 +102,12 @@ function maxDegrees(data) {
 //uniq
 
 function findDoctoralDegrees(data) {
-    return _.filter(data, function(record) { return record["OUTCOME"] === "Doctoral Degrees"} );
+  return _.filter(data, function (record) {
+    return record["OUTCOME"] === "Doctoral Degrees";
+  });
 }
 
 function doctoralDegreePrograms(data) {
-    return _.uniq(_.pluck(findDoctoralDegrees(data), "CIP_DESC"));
+  return _.uniq(_.pluck(findDoctoralDegrees(data), "CIP_DESC"));
 }
 
-//console.log(doctoralDegreePrograms(uhdata));
