@@ -1,6 +1,14 @@
 /* globals _, uhdata */
 /* exported testdata, maxDegrees, uhdata, percentageHawaiian, totalDegreesByYear, listCampuses, listCampusDegrees, doctoralDegreePrograms */
 
+function hasAwards(record) {
+  return record.hasOwnProperty("AWARDS");
+}
+
+function awardsIsInt(record) {
+  return _.isNumber(record.AWARDS);
+}
+
 //totalDegrees(data) This function can be passed uhdata and returns the total number of degrees awarded in the data set.
 //pluck number of awards from every record
 //reduce to one number
@@ -9,6 +17,7 @@
  * @param data an array that contains objects with information about different degrees earned
  * @returns an array of the numbers taken from the awards field of every object
  */
+
 
 function arrayOfAwards(data) {
   return _.pluck(data, "AWARDS");
@@ -21,6 +30,13 @@ function arrayOfAwards(data) {
  */
 
 function totalDegrees(data) {
+
+  if(!_.every(data, hasAwards)) {
+    throw new Error("No Awards Field");
+  }
+  if(!_.every(data, awardsIsInt)) {
+    throw new Error("Awards field can only be an integer");
+  }
   return _.reduce(arrayOfAwards(data), function (memo, num) {
     return memo + num;
   }, 0);
